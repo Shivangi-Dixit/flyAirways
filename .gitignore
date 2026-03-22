@@ -1,0 +1,39 @@
+# Node/npm/yarn
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build and Output directories
+/frontend/dist/
+/frontend/.angular/
+/frontend/out-tsc/
+/backend/dist/
+
+# Test coverage directories
+/frontend/coverage/
+/backend/coverage/
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+!.env.template
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Trashes
+Thumbs.db
+ehthumbs.db
+
+# Docker Data (if any local volumes are spun up inside the repo folder)
+db-data/
+pgdata/
+docker-data/

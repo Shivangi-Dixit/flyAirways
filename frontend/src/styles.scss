@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import 'flatpickr/dist/themes/dark.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .glass-card {
+    @apply bg-superapp-card/60 backdrop-blur-xl border border-white/5 shadow-2xl rounded-3xl;
+  }
+  .glass-header {
+    @apply bg-superapp-black/50 backdrop-blur-lg border-b border-white/5 shadow-md;
+  }
+  .btn-primary {
+    @apply bg-gradient-to-r from-superapp-hotPurple to-superapp-purple text-white font-bold py-3 px-8 rounded-full hover:shadow-neon-purple-lg transition-all duration-300 transform hover:-translate-y-1;
+  }
+  .btn-outline {
+    @apply border-2 border-superapp-purple text-superapp-neonPurple shadow-neon-purple font-bold py-3 px-8 rounded-full hover:bg-superapp-purple hover:text-white transition-all duration-300;
+  }
+  .input-futuristic {
+    @apply w-full bg-black/50 border border-superapp-purple/30 rounded-xl text-white placeholder-white/40 px-5 py-4 text-base focus:outline-none focus:border-superapp-purple focus:shadow-neon-purple transition-all backdrop-blur-sm truncate;
+  }
+}
+
+body {
+  @apply bg-superapp-black text-white font-sans antialiased m-0 p-0 overflow-x-hidden;
+}
+
+::-webkit-calendar-picker-indicator {
+    filter: invert(1) sepia(100%) saturate(10000%) hue-rotate(270deg);
+}
+
+// Custom scrollbar
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: #a855f7;
+  border-radius: 4px;
+}
+
+// Flatpickr Neon Theme Overrides
+.flatpickr-calendar.dark {
+  background: rgba(15, 15, 19, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+  font-family: 'Inter', sans-serif;
+  
+  .flatpickr-day.selected {
+    background: #a855f7;
+    border-color: #a855f7;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.8);
+  }
+}

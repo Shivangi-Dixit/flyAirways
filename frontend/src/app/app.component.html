@@ -1,0 +1,138 @@
+<div class="relative min-h-screen flex flex-col font-sans bg-superapp-black text-white selection:bg-superapp-purple selection:text-white">
+  
+  <!-- Particles Background -->
+  <div id="particles-js" class="fixed inset-0 z-0 pointer-events-none"></div>
+
+  <!-- Futuristic Glowing Orbs -->
+  <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-superapp-purple/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
+  <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-superapp-navy/30 rounded-full blur-[120px] pointer-events-none z-0"></div>
+
+  <!-- Header -->
+  <header class="glass-header sticky top-0 z-50 px-8 py-5 flex items-center justify-between">
+    <div class="flex items-center gap-4 cursor-pointer group relative z-10 w-full sm:w-auto">
+      <div class="w-12 h-12 bg-black border border-superapp-purple rounded-xl flex items-center justify-center text-superapp-purple font-extrabold text-2xl shadow-neon-purple group-hover:shadow-neon-purple-lg transition-all duration-300">NX</div>
+      <span class="text-white text-2xl md:text-3xl tracking-widest font-black uppercase">Aero<span class="text-superapp-purple">Nexus</span></span>
+    </div>
+    <nav class="hidden lg:flex gap-10 text-white/70 font-bold tracking-widest text-sm uppercase relative z-10">
+      <a href="#" class="hover:text-superapp-neonPurple hover:shadow-neon-purple transition-colors">Flights</a>
+      <a href="#" class="hover:text-superapp-neonPurple hover:shadow-neon-purple transition-colors">Orbitals</a>
+      <a href="#" class="hover:text-superapp-neonPurple hover:shadow-neon-purple transition-colors">Hyper-routes</a>
+    </nav>
+    <div class="hidden sm:flex items-center gap-6 relative z-10">
+      <button class="text-white/80 hover:text-superapp-neonPurple font-bold uppercase tracking-wider text-sm transition-colors whitespace-nowrap">Log in</button>
+      <button class="btn-primary text-sm tracking-wider uppercase whitespace-nowrap">Connect</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow relative z-10 p-4 md:p-8 lg:p-12">
+    <!-- Hero Box -->
+    <div class="max-w-6xl mx-auto transition-all duration-700 mt-10" [ngClass]="{'mt-2': hasSearched()}">
+      @if (!hasSearched()) {
+        <div class="text-center mb-16 animate-[fadeIn_1s_ease-out]">
+          <h1 class="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tighter uppercase leading-none text-white drop-shadow-2xl">
+            Welcome to the <br/>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-superapp-neonPurple via-superapp-purple to-superapp-hotPurple drop-shadow-[0_0_15px_rgba(168,85,247,0.8)]">Future of Travel</span>
+          </h1>
+          <p class="text-lg md:text-xl text-white/50 tracking-widest uppercase font-medium">Hyper-speed atmospheric transport protocols</p>
+        </div>
+      }
+
+      <!-- Modular Flight Search Widget -->
+      <app-flight-search 
+        [isSearching]="isSearching()" 
+        (onSearch)="handleSearch($event)">
+      </app-flight-search>
+    </div>
+
+    <!-- Flight Results Grid -->
+    @if (hasSearched()) {
+    <div class="max-w-6xl mx-auto mt-16 animate-[slideUp_0.6s_ease-out]">
+      <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-8 border-b border-white/10 pb-6 gap-4">
+        <div class="w-full sm:w-auto truncate">
+          <h2 class="text-2xl md:text-4xl font-black text-white tracking-tighter uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">Available Routing</h2>
+          <p class="text-superapp-neonPurple mt-2 text-xs md:text-sm font-mono tracking-widest uppercase truncate">{{origin()}} // {{destination()}} &bull; {{date() | date:'shortDate'}}</p>
+        </div>
+        <div class="text-[10px] md:text-xs font-black tracking-[0.2em] text-superapp-neonPurple border border-superapp-purple/50 bg-superapp-hotPurple/10 px-4 py-2 rounded-lg shadow-neon-purple uppercase whitespace-nowrap">
+          {{flights().length}} Routes Found
+        </div>
+      </div>
+
+      @if (isSearching()) {
+        <div class="flex flex-col justify-center items-center py-20 md:py-32 gap-6">
+          <div class="relative w-24 h-24">
+            <div class="absolute inset-0 border-4 border-white/10 rounded-full"></div>
+            <div class="absolute inset-0 border-4 border-superapp-purple border-t-transparent rounded-full animate-spin"></div>
+            <div class="absolute inset-4 border-4 border-superapp-hotPurple border-b-transparent rounded-full animate-[spin_1.5s_linear_infinite_reverse]"></div>
+          </div>
+          <span class="text-superapp-neonPurple font-mono tracking-widest uppercase text-xs animate-pulse">Calculating telemetry...</span>
+        </div>
+      } @else {
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          @for (flight of flights(); track flight.id) {
+            <!-- Modular Flight Card -->
+            <app-flight-card 
+              [flight]="flight" 
+              (onInitialize)="openBooking($event)">
+            </app-flight-card>
+          }
+          
+          @if (flights().length === 0) {
+            <div class="col-span-1 lg:col-span-2 text-center py-20 glass-card border border-superapp-purple/20">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 mx-auto text-white/10 mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+              <h3 class="text-2xl font-black text-white/50 uppercase tracking-widest">No Routes Found</h3>
+              <p class="text-superapp-purple mt-4 font-mono text-xs tracking-widest uppercase">Modify search parameters</p>
+            </div>
+          }
+        </div>
+      }
+    </div>
+    }
+
+    <!-- Modular Booking Modal -->
+    @if (selectedFlight()) {
+      <app-booking-modal 
+        [flight]="selectedFlight()" 
+        (onClose)="closeBookingModal()">
+      </app-booking-modal>
+    }
+
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#050505] border-t border-white/5 text-white/40 py-16 px-4 md:px-8 mt-20 relative z-10 w-full overflow-hidden">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 font-mono text-[10px] sm:text-xs uppercase tracking-widest">
+      <div class="col-span-1 sm:col-span-2 md:pr-8">
+        <div class="flex items-center gap-4 mb-6 cursor-pointer opacity-80 hover:opacity-100 transition-opacity">
+          <div class="w-10 h-10 border border-superapp-purple rounded-xl flex items-center justify-center text-superapp-purple font-extrabold text-lg shadow-neon-purple min-w-[40px]">NX</div>
+          <span class="text-white text-lg sm:text-xl tracking-widest font-black uppercase truncate">Aero<span class="text-superapp-purple">Nexus</span></span>
+        </div>
+        <p class="text-white/30 leading-loose lowercase text-justify tracking-[0.1em]">establishing hyper-speed transport protocols across the global network. elevating passenger metrics to optimal parameters. <br><br>system online.</p>
+      </div>
+      <div>
+        <h4 class="text-superapp-neonPurple font-bold mb-6 tracking-[0.3em] truncate">Network Links</h4>
+        <ul class="space-y-4">
+          <li><a href="#" class="hover:text-superapp-neonPurple transition-colors hover:pl-2 duration-300 block truncate">Core Nodes</a></li>
+          <li><a href="#" class="hover:text-superapp-neonPurple transition-colors hover:pl-2 duration-300 block truncate">Manifesto</a></li>
+          <li><a href="#" class="hover:text-superapp-neonPurple transition-colors hover:pl-2 duration-300 block truncate">Telemetry</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-superapp-neonPurple font-bold mb-6 tracking-[0.3em] truncate">System Uplink</h4>
+        <p class="mb-4 text-white/30 lowercase truncate">Input datastream ID</p>
+        <div class="flex bg-black border border-white/10 rounded overflow-hidden focus-within:border-superapp-purple transition-colors">
+          <input type="text" placeholder="ID_" class="bg-transparent py-3 px-4 text-white focus:outline-none w-full font-mono text-xs min-w-0">
+          <button class="bg-superapp-purple text-white font-black px-5 hover:bg-superapp-hotPurple transition-colors">></button>
+        </div>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/5 text-[8px] sm:text-[9px] text-center flex flex-col sm:flex-row justify-between items-center gap-4 opacity-50 font-mono tracking-widest w-full">
+      <span class="truncate w-full sm:w-auto text-center sm:text-left">&copy; 2026 AeroNexus Protocol. SECURE.</span>
+      <div class="flex gap-4 sm:gap-6 text-superapp-neonPurple flex-wrap justify-center sm:justify-end">
+        <a href="#" class="hover:text-white transition-colors truncate">Encryption</a>
+        <a href="#" class="hover:text-white transition-colors truncate">Directives</a>
+      </div>
+    </div>
+  </footer>
+</div>

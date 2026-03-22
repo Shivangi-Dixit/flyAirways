@@ -1,0 +1,65 @@
+<div class="glass-card p-6 md:p-10 relative overflow-visible group border-superapp-purple/20 hover:border-superapp-purple/50 transition-colors duration-500 shadow-2xl">
+  <div class="absolute inset-0 bg-gradient-to-b from-superapp-purple/5 to-transparent pointer-events-none rounded-3xl"></div>
+  
+  <div class="flex flex-col md:flex-row gap-8 relative z-10">
+    <!-- Origin Autocomplete -->
+    <div class="flex-1 min-w-0 relative">
+      <label class="block text-superapp-purple text-[10px] font-black mb-3 uppercase tracking-widest pl-2 drop-shadow-[0_0_5px_rgba(168,85,247,0.5)] truncate">Origin Vector</label>
+      <input type="text" [ngModel]="origin()" (input)="filterOrigins($event)" (focus)="showOriginDropdown.set(true)" (blur)="closeDropdowns()" placeholder="3 letters min e.g. AUH" class="input-futuristic font-mono tracking-wider uppercase w-full">
+      
+      @if (showOriginDropdown() && filteredOrigins().length > 0) {
+        <ul class="absolute top-[100%] left-0 w-full mt-2 bg-[#0f0f13]/95 backdrop-blur-xl border border-superapp-purple/30 rounded-xl shadow-neon-purple-lg z-50 overflow-hidden max-h-48 overflow-y-auto">
+          @for (airport of filteredOrigins(); track airport.iataCode) {
+            <li (mousedown)="selectOrigin(airport.iataCode)" class="px-4 py-3 hover:bg-superapp-purple/20 cursor-pointer flex justify-between items-center border-b border-white/5 last:border-0 transition-colors text-sm">
+              <span class="font-bold text-white tracking-widest">{{airport.cityName}}</span>
+              <span class="text-superapp-neonPurple font-mono text-xs">{{airport.iataCode}}</span>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+
+    <!-- Destination Autocomplete -->
+    <div class="flex-1 min-w-0 relative">
+      <label class="block text-superapp-purple text-[10px] font-black mb-3 uppercase tracking-widest pl-2 drop-shadow-[0_0_5px_rgba(168,85,247,0.5)] truncate">Destination Vector</label>
+      <input type="text" [ngModel]="destination()" (input)="filterDestinations($event)" (focus)="showDestDropdown.set(true)" (blur)="closeDropdowns()" placeholder="3 letters min e.g. LHR" class="input-futuristic font-mono tracking-wider uppercase w-full">
+      
+      @if (showDestDropdown() && filteredDestinations().length > 0) {
+        <ul class="absolute top-[100%] left-0 w-full mt-2 bg-[#0f0f13]/95 backdrop-blur-xl border border-superapp-purple/30 rounded-xl shadow-neon-purple-lg z-50 overflow-hidden max-h-48 overflow-y-auto">
+          @for (airport of filteredDestinations(); track airport.iataCode) {
+            <li (mousedown)="selectDest(airport.iataCode)" class="px-4 py-3 hover:bg-superapp-purple/20 cursor-pointer flex justify-between items-center border-b border-white/5 last:border-0 transition-colors text-sm">
+              <span class="font-bold text-white tracking-widest">{{airport.cityName}}</span>
+              <span class="text-superapp-neonPurple font-mono text-xs">{{airport.iataCode}}</span>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+
+    <!-- Flatpickr Date Input -->
+    <div class="flex-1 min-w-0 relative">
+      <label class="block text-superapp-purple text-[10px] font-black mb-3 uppercase tracking-widest pl-2 drop-shadow-[0_0_5px_rgba(168,85,247,0.5)] truncate">Departure Coordinate</label>
+      <input #datePicker type="text" placeholder="Select cycle..." class="input-futuristic font-mono tracking-wider text-superapp-neonPurple bg-black/50 cursor-pointer">
+    </div>
+  </div>
+
+  <div class="mt-8 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+    <div class="flex gap-8 md:gap-10 w-full md:w-auto justify-center">
+      <label class="flex items-center gap-3 cursor-pointer group">
+        <input type="radio" name="trip" class="accent-superapp-purple w-5 h-5 focus:ring-superapp-purple" checked>
+        <span class="text-sm font-bold tracking-widest uppercase group-hover:text-superapp-neonPurple transition-colors whitespace-nowrap">Return</span>
+      </label>
+      <label class="flex items-center gap-3 cursor-pointer group">
+        <input type="radio" name="trip" class="accent-superapp-purple w-5 h-5 focus:ring-superapp-purple">
+        <span class="text-sm font-bold tracking-widest uppercase group-hover:text-superapp-neonPurple transition-colors whitespace-nowrap">One-way</span>
+      </label>
+    </div>
+    
+    <button (click)="submitSearch()" [disabled]="isSearching || origin() === '' || destination() === ''" class="btn-primary w-full md:w-auto text-lg px-8 lg:px-12 py-5 flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed border border-superapp-purple/50">
+      <span class="tracking-widest uppercase font-black whitespace-nowrap">{{ isSearching ? 'Scanning...' : 'Initialize Search' }}</span>
+      @if (!isSearching) {
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:translate-x-2 transition-transform hidden sm:block" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+      }
+    </button>
+  </div>
+</div>
