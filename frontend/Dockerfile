@@ -1,10 +1,10 @@
-FROM node:18-alpine AS build
+FROM node:18-buster AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npx ng build --configuration=production
 
-FROM nginx:alpine
+FROM nginx:stable
 COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
 EXPOSE 80
