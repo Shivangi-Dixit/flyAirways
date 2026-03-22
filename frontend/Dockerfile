@@ -1,21 +1,10 @@
-# Build stage
-FROM node:20-alpine AS builder
-
+FROM node:18-alpine AS build
 WORKDIR /app
-
 COPY package*.json ./
 RUN npm install
-
 COPY . .
-RUN npm run build
+RUN npx ng build --configuration=production
 
-# Serve stage using Nginx
 FROM nginx:alpine
-
-# Copy built assets to Nginx
-COPY --from=builder /app/dist/frontend/browser /usr/share/nginx/html
-
-# Expose port
+COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
 EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]

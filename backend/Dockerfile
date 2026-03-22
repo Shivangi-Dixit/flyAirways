@@ -1,28 +1,13 @@
-# Base image
-FROM node:20-alpine AS builder
-
+FROM node:18-alpine AS build
 WORKDIR /app
-
-# Install dependencies
 COPY package*.json ./
 RUN npm install
-
-# Build application
 COPY . .
 RUN npm run build
 
-# Production image
-FROM node:20-alpine
-
+FROM node:18-alpine
 WORKDIR /app
-COPY package*.json ./
-RUN npm install --only=production
-COPY --from=builder /app/dist ./dist
-
-# Environment variables
-ENV NODE_ENV=production
-ENV PORT=3000
-
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
 EXPOSE 3000
-
 CMD ["node", "dist/main"]
