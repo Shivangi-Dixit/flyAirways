@@ -1,4 +1,4 @@
-FROM node:22-buster AS build
+FROM node:22-bullseye AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
